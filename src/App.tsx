@@ -193,7 +193,8 @@ interface RigProps {
 }
 
 function CameraRig(props: RigProps) {
-  const { camera, controls } = useThree() as any;
+  const { camera } = useThree() as any;
+  const controlsRef = useRef<any>(null);
   const {
     ballsRef,
     camDirRef,
@@ -211,7 +212,7 @@ function CameraRig(props: RigProps) {
   } = props;
 
   useFrame((_, dt) => {
-    const c = controls as any;
+    const c = controlsRef.current;
     if (c) {
       c.update();
       // Read azimuth
@@ -296,9 +297,7 @@ function CameraRig(props: RigProps) {
 
   return (
     <OrbitControls
-      ref={(c) => {
-        (controls as any).current = c;
-      }}
+      ref={controlsRef}
       enablePan={false}
       enableZoom
       minDistance={1.8}
