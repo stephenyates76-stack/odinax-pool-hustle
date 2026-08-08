@@ -2,7 +2,7 @@ import { TABLE, POCKETS } from "./physics";
 
 export function PoolTable() {
   const railH = TABLE.railH;
-  const railW = 0.12;
+  const railW = TABLE.railW;
   const W = TABLE.width;
   const D = TABLE.depth;
 
@@ -30,12 +30,10 @@ export function PoolTable() {
       {/* Rails - top & bottom (Z) */}
       {[-1, 1].map((s) => (
         <group key={`rz${s}`}>
-          {/* Left segment */}
           <mesh castShadow position={[-W / 4, railH / 2, s * (D / 2 + railW / 2)]}>
             <boxGeometry args={[W / 2 - TABLE.pocketR * 2, railH, railW]} />
             <meshStandardMaterial color="#2a1408" roughness={0.4} metalness={0.3} />
           </mesh>
-          {/* Right segment */}
           <mesh castShadow position={[W / 4, railH / 2, s * (D / 2 + railW / 2)]}>
             <boxGeometry args={[W / 2 - TABLE.pocketR * 2, railH, railW]} />
             <meshStandardMaterial color="#2a1408" roughness={0.4} metalness={0.3} />
@@ -84,26 +82,59 @@ export function PoolTable() {
         </mesh>
       ))}
 
-      {/* Table base/legs */}
-      <mesh castShadow position={[0, -0.15, 0]}>
-        <boxGeometry args={[W + railW * 2 + 0.1, 0.3, D + railW * 2 + 0.1]} />
+      {/* Apron/skirt below rails */}
+      <mesh castShadow position={[0, -0.06, -(D / 2 + railW / 2)]}>
+        <boxGeometry args={[W + railW * 2, 0.18, 0.04]} />
         <meshStandardMaterial color="#1a0d05" roughness={0.5} metalness={0.4} />
       </mesh>
+      <mesh castShadow position={[0, -0.06, D / 2 + railW / 2]}>
+        <boxGeometry args={[W + railW * 2, 0.18, 0.04]} />
+        <meshStandardMaterial color="#1a0d05" roughness={0.5} metalness={0.4} />
+      </mesh>
+      <mesh castShadow position={[-(W / 2 + railW / 2), -0.06, 0]}>
+        <boxGeometry args={[0.04, 0.18, D + railW * 2]} />
+        <meshStandardMaterial color="#1a0d05" roughness={0.5} metalness={0.4} />
+      </mesh>
+      <mesh castShadow position={[W / 2 + railW / 2, -0.06, 0]}>
+        <boxGeometry args={[0.04, 0.18, D + railW * 2]} />
+        <meshStandardMaterial color="#1a0d05" roughness={0.5} metalness={0.4} />
+      </mesh>
+
+      {/* Table base slab */}
+      <mesh castShadow position={[0, -0.17, 0]}>
+        <boxGeometry args={[W + railW * 2, 0.08, D + railW * 2]} />
+        <meshStandardMaterial color="#1a0d05" roughness={0.5} metalness={0.4} />
+      </mesh>
+
+      {/* Modern tapered legs */}
       {[
-        [-W / 2 - 0.05, -D / 2 - 0.05],
-        [W / 2 + 0.05, -D / 2 - 0.05],
-        [-W / 2 - 0.05, D / 2 + 0.05],
-        [W / 2 + 0.05, D / 2 + 0.05],
+        [-(W / 2 + railW * 0.3), -(D / 2 + railW * 0.3)],
+        [W / 2 + railW * 0.3, -(D / 2 + railW * 0.3)],
+        [-(W / 2 + railW * 0.3), D / 2 + railW * 0.3],
+        [W / 2 + railW * 0.3, D / 2 + railW * 0.3],
       ].map((pos, i) => (
-        <mesh key={i} castShadow position={[pos[0], -0.5, pos[1]]}>
-          <boxGeometry args={[0.1, 0.5, 0.1]} />
-          <meshStandardMaterial color="#0d0703" roughness={0.4} metalness={0.6} />
-        </mesh>
+        <group key={i} position={[pos[0], -0.21, pos[1]]}>
+          {/* Upper leg - wider */}
+          <mesh castShadow position={[0, -0.2, 0]}>
+            <cylinderGeometry args={[0.07, 0.05, 0.4, 12]} />
+            <meshStandardMaterial color="#0d0703" roughness={0.35} metalness={0.6} />
+          </mesh>
+          {/* Lower leg - narrower */}
+          <mesh castShadow position={[0, -0.55, 0]}>
+            <cylinderGeometry args={[0.045, 0.035, 0.3, 12]} />
+            <meshStandardMaterial color="#0d0703" roughness={0.35} metalness={0.6} />
+          </mesh>
+          {/* Foot pad */}
+          <mesh castShadow position={[0, -0.72, 0]}>
+            <cylinderGeometry args={[0.06, 0.06, 0.04, 12]} />
+            <meshStandardMaterial color="#1a1a1a" roughness={0.3} metalness={0.7} />
+          </mesh>
+        </group>
       ))}
 
       {/* Floor */}
-      <mesh receiveShadow position={[0, -0.76, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[30, 30]} />
+      <mesh receiveShadow position={[0, -0.94, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[40, 40]} />
         <meshStandardMaterial color="#08090f" roughness={0.9} metalness={0.1} />
       </mesh>
     </group>

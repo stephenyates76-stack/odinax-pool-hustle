@@ -112,7 +112,6 @@ export interface PhysicsStep {
 
 export function stepPhysics(balls: Ball[], dt: number): PhysicsStep {
   const result: PhysicsStep = { pocketedThisStep: [] };
-  const r = TABLE.ballR;
   const halfW = TABLE.width / 2 - r;
   const halfD = TABLE.depth / 2 - r;
 
